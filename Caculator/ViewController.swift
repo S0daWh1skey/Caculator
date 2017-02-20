@@ -20,15 +20,14 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
  
     }  */
-
     @IBOutlet weak var Display: UILabel!
 
     var UserIsInTheMiddleOfTypingNumber: Bool = false
     
     @IBAction func AppendDigit(sender: UIButton) {
         let digit = sender.currentTitle!
-        if UserIsInTheMiddleOfTypingNumber{
-        Display.text = Display.text! + digit
+        if UserIsInTheMiddleOfTypingNumber {
+            Display.text = Display.text! + digit
         }
         else{
             Display.text = digit
@@ -51,6 +50,8 @@ class ViewController: UIViewController {
                 PerformOperation(operation: {$0 * $1})
             case "-":
                 PerformOperation(operation: {$1 * $0})
+            case "√":
+                performOperation(operation: {sqrt($0)})
        default: break
         }
     }
@@ -58,6 +59,13 @@ class ViewController: UIViewController {
     func PerformOperation(operation: (Double, Double) -> Double){
         if(opperandStack.count >= 2){
             DisplayValue = operation(opperandStack.removeLast() , opperandStack.removeLast())
+            Enter()
+        }
+    }
+    
+    func performOperation(operation: (Double)-> Double){
+        if(opperandStack.count >= 1){
+            DisplayValue = operation(opperandStack.removeLast())
             Enter()
         }
     }
