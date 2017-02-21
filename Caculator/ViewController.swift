@@ -36,6 +36,8 @@ class ViewController: UIViewController {
         print("digit = \(digit)")
     }
     
+    //Caculator engine code
+    
     @IBAction func Operate(sender: UIButton) {
         let operation = sender.currentTitle!
         if UserIsInTheMiddleOfTypingNumber{
