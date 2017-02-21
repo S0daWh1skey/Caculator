@@ -24,6 +24,10 @@ class ViewController: UIViewController {
 
     var UserIsInTheMiddleOfTypingNumber: Bool = false
     
+    
+    var brain = CaculatorBarin()
+    
+    
     @IBAction func AppendDigit(sender: UIButton) {
         let digit = sender.currentTitle!
         if UserIsInTheMiddleOfTypingNumber {
@@ -39,45 +43,37 @@ class ViewController: UIViewController {
     //Caculator engine code
     
     @IBAction func Operate(sender: UIButton) {
-        let operation = sender.currentTitle!
         if UserIsInTheMiddleOfTypingNumber{
-            Enter()
+            UserIsInTheMiddleOfTypingNumber = false
+            
+            if let result = brain.pushOpperand(opperand: DisplayValue){
+                DisplayValue = result
+            }
+            else{
+                DisplayValue = 0
+            }
         }
-        switch operation{
-            case "×":
-                PerformOperation(operation: {$0 * $1})
-            case "÷":
-                PerformOperation(operation: {$1 * $0})
-            case "+":
-                PerformOperation(operation: {$0 * $1})
-            case "-":
-                PerformOperation(operation: {$1 * $0})
-            case "√":
-                performOperation(operation: {sqrt($0)})
-       default: break
+       if let operation = sender.currentTitle{
+        if let result = brain.performOperation(symbol: operation){
+            DisplayValue = result
+        }else{
+            DisplayValue = 0
+        }
         }
     }
 
-    func PerformOperation(operation: (Double, Double) -> Double){
-        if(opperandStack.count >= 2){
-            DisplayValue = operation(opperandStack.removeLast() , opperandStack.removeLast())
-            Enter()
-        }
-    }
-    
-    func performOperation(operation: (Double)-> Double){
-        if(opperandStack.count >= 1){
-            DisplayValue = operation(opperandStack.removeLast())
-            Enter()
-        }
-    }
-    
-    var opperandStack = Array<Double>()
-    
     @IBAction func Enter() {
         UserIsInTheMiddleOfTypingNumber = false
-        opperandStack .append(DisplayValue)
-        print("opperandStack = \(opperandStack)")
+        
+        if let result = brain.pushOpperand(opperand: DisplayValue){
+            DisplayValue = result
+        }
+        else{
+            DisplayValue = 0
+        }
+        
+//        opperandStack .append(DisplayValue)
+//        print("opperandStack = \(opperandStack)")
     }
     var DisplayValue: Double {
         get{
